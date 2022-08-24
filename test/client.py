@@ -2,7 +2,7 @@ import socket
 import time
 
 c = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-c.connect(("127.0.0.1", 8900))
+c.connect(("127.0.0.1", 8990))
 while True:
     c.send(b"hello")
 

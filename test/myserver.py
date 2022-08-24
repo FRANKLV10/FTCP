@@ -1,7 +1,4 @@
-import asyncio
-import time
-from abc import ABC
-
+from utils.parseconfig import get_config
 from fnet.router import Router
 from fnet.server import Server
 from fnet.tcprequest import TcpRequest
@@ -19,8 +16,9 @@ class MyRouter(Router):
 
 
 if __name__ == '__main__':
+    config = get_config("./config.json")
     r = MyRouter()
-    s = Server()
+    s = Server(config)
     s.add_router(r)
     print(s.router)
     s.serve()
