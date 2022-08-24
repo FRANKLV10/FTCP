@@ -6,7 +6,6 @@ from utils.logger import logger
 from fnet.message import msg_handler, new_message
 
 
-
 class Connection:
     def __init__(self, conn, connID, router):
         self.conn = conn
@@ -37,9 +36,10 @@ class Connection:
         data = b''
         logger.info(f"connID is {self.connID}")
         while True:
+            # read msg head
             client_data = await self.loop.sock_recv(self.conn, msg_handler.headLen)
             logger.info(client_data)
-            # data_len, msgId = msg_handler.unpack_msg(client_data)
+            # data_len, msgId = data_pack.unpack_msg(client_data)
             data_len = 0
             msgId = 1
             if data_len > 0:
@@ -47,6 +47,8 @@ class Connection:
                 logger.info(data)
             msg = new_message(msgId, data)
             req = TcpRequest(self.conn, msg)
+
+            #
             if self.router is not None:
                 await self.router.pre_handle(req)
                 await self.router.handle(req)
