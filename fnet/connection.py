@@ -3,7 +3,8 @@ import socket
 
 from fnet.tcprequest import TcpRequest
 from utils.logger import logger
-from fnet.message import msg_handler, new_message
+from fnet.message import new_message
+from fnet.datapack import data_pack
 
 
 class Connection:
@@ -37,14 +38,14 @@ class Connection:
         logger.info(f"connID is {self.connID}")
         while True:
             # read msg head
-            client_data = await self.loop.sock_recv(self.conn, msg_handler.headLen)
-            logger.info(client_data)
-            # data_len, msgId = data_pack.unpack_msg(client_data)
-            data_len = 0
-            msgId = 1
+            head_data = await self.loop.sock_recv(self.conn, data_pack.headLen)
+            print(f"receive head data: {head_data}")
+            data_len, msgId = data_pack.unpack_msg(head_data)
+            # data_len = 0
+            # msgId = 1
             if data_len > 0:
                 data = await self.loop.sock_recv(self.conn, data_len)
-                logger.info(data)
+                print(f"receive data: {data}")
             msg = new_message(msgId, data)
             req = TcpRequest(self.conn, msg)
 

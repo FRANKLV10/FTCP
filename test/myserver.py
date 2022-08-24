@@ -6,13 +6,16 @@ from fnet.tcprequest import TcpRequest
 
 class MyRouter(Router):
     async def pre_handle(self, req: TcpRequest):
-        await req.loop.sock_sendall(req.conn, b"pre handle")
+        if req.msgId == 1:
+            await req.loop.sock_sendall(req.conn, b"pre handle")
 
     async def handle(self, req: TcpRequest):
-        await req.loop.sock_sendall(req.conn, b"handle")
+        if req.msgId == 2:
+            await req.loop.sock_sendall(req.conn, b"handle")
 
     async def after_handle(self, req: TcpRequest):
-        await req.loop.sock_sendall(req.conn, b"after handle")
+        if req.msgId == 3:
+            await req.loop.sock_sendall(req.conn, b"after handle")
 
 
 if __name__ == '__main__':

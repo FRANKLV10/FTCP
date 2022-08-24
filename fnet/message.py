@@ -30,11 +30,8 @@ class Message:
         self._dataLen = value
 
 
-def new_message(msgId, data):
+def new_message(msgId: int, data: bytes):
     msg = Message()
     msg.msgId = msgId
     msg.data = data
     return msg
-
-
-
