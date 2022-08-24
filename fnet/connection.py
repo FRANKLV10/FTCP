@@ -4,7 +4,7 @@ import socket
 from fnet.tcprequest import TcpRequest
 from utils.logger import logger
 from fnet.message import msg_handler, new_message
-from fnet.router import Router
+
 
 
 class Connection:
@@ -47,9 +47,7 @@ class Connection:
                 logger.info(data)
             msg = new_message(msgId, data)
             req = TcpRequest(self.conn, msg)
-            print(self.router)
             if self.router is not None:
-                print(2)
                 await self.router.pre_handle(req)
                 await self.router.handle(req)
                 await self.router.after_handle(req)

@@ -8,9 +8,9 @@ from fnet.connection import Connection
 
 class Server:
     def __init__(self, config):
-        self.name = config.name
-        self.ip = config.ip
-        self.port = config.port
+        self.name = config["name"]
+        self.ip = config["ip"]
+        self.port = config["port"]
         self.AF_INET = (self.ip, self.port)
         self.socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.loop = asyncio.get_event_loop()
@@ -21,13 +21,13 @@ class Server:
         start accept client connection
         :return:
         """
-        logger.info("fnet start success", self.router)
+        logger.info(f"[{self.name}] start success")
         conn_id = 0
         while True:
             conn, client_addr = await self.loop.sock_accept(self.socket)
             logger.info(f'a client connect to server ======> client_addr:{client_addr}')
             deal_conn = Connection(conn, conn_id, self.router)
-            self.loop.create_task(deal_conn.start_reader())
+            self.loop.create_task(deal_conn.start_receiver())
             conn_id += 1
 
     def stop(self):
