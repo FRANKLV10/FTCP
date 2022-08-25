@@ -1,13 +1,10 @@
 import asyncio
-
-from fnet.datapack import data_pack
-from fnet.message import Message, new_message
-from utils.logger import logger
+from fnet.message import Message
 
 
 class TcpRequest:
-    def __init__(self, conn, msg: Message):
-        self.conn = conn
+    def __init__(self, connection, msg: Message):
+        self.connection = connection
         self.msg = msg
         self.loop = asyncio.get_running_loop()
 
@@ -18,9 +15,3 @@ class TcpRequest:
     @property
     def msgId(self) -> int:
         return self.msg.msgId
-
-
-
-
-
-

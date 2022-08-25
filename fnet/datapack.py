@@ -41,4 +41,4 @@ class DataPack:
 data_pack = DataPack()
 
 if __name__ == '__main__':
-    data_pack.pack_msg(1,b"222")
+    data_pack.pack_msg(1, b"222")

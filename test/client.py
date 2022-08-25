@@ -10,7 +10,7 @@ def client():
     msg1 = new_message(1, b"hello")
     msg2 = new_message(2, b"test")
     msg3 = new_message(3, b"bye")
-    msg_list = [msg1,msg3, msg2]
+    msg_list = [msg1, msg3, msg2]
     while True:
         for m in msg_list:
             msg = data_pack.pack_msg(m)
@@ -23,4 +23,3 @@ def client():
 if __name__ == '__main__':
     # expect print after handle,pre handle,handle
     client()
-

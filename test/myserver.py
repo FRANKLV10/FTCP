@@ -8,19 +8,19 @@ from fnet.tcprequest import TcpRequest
 class MyRouter1(Router):
     async def pre_handle(self, req: TcpRequest):
         if req.msgId == 1:
-            await req.send_msg(1, b"dsdsdsdsd")
+            await req.connection.send_msg(1, b"234234f")
 
 
 class MyRouter2(Router):
     async def handle(self, req: TcpRequest):
         if req.msgId == 2:
-            await req.send_buff(data=b"434343")
+            await req.connection.send_msg(2, b"freererfe")
 
 
 class MyRouter3(Router):
     async def after_handle(self, req: TcpRequest):
         if req.msgId == 3:
-            await req.send_msg(2, b"dsdsdsdsd")
+            await req.connection.send_msg(3, b"freffdfdfrfe")
 
 
 if __name__ == '__main__':
