@@ -1,6 +1,7 @@
 import asyncio
 import socket
 
+from fnet.messagehandler import msg_handler
 from fnet.tcprequest import TcpRequest
 from utils.logger import logger
 from fnet.message import new_message
@@ -8,17 +9,17 @@ from fnet.datapack import data_pack
 
 
 class Connection:
-    def __init__(self, conn, connID, router):
+    def __init__(self, conn, connID):
         self.conn = conn
         self.connID = connID
         self.loop = asyncio.get_running_loop()
-        self.router = router
+
 
     def start(self):
         pass
 
     def close(self):
-        """check connections stauts """
+        """check connections status """
         getattr(self.conn, '_closed')
         self.conn.close()
 
@@ -46,12 +47,12 @@ class Connection:
             req = TcpRequest(self.conn, msg)
 
             #
-            if self.router is not None:
-                await self.router.pre_handle(req)
-                await self.router.handle(req)
-                await self.router.after_handle(req)
+            # if self.router is not None:
+            #     await self.router.pre_handle(req)
+            #     await self.router.handle(req)
+            #     await self.router.after_handle(req)
 
-
+            await msg_handler.process_messages_now(req)
 
 
 if __name__ == '__main__':

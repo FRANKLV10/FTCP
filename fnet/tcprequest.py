@@ -32,5 +32,4 @@ class TcpRequest:
             raise Exception("Connection closed when send msg")
 
         msg = data_pack.pack_msg(send_msgId, send_data)
-
         await self.loop.sock_sendall(self.conn, msg)
