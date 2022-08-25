@@ -1,9 +1,11 @@
 import asyncio
 
+from fnet.datapack import data_pack
 from fnet.message import Message
+from utils.logger import logger
 
 
-class TcpRequest:
+class TcpRequest():
     def __init__(self, conn, msg: Message):
         self.conn = conn
         self.msg = msg
@@ -17,6 +19,18 @@ class TcpRequest:
     def msgId(self) -> int:
         return self.msg.msgId
 
+    def is_close(self) -> bool:
+        """
+        whether the connection is closed
+        :return:
+        """
+        return getattr(self.conn, '_closed')
 
+    async def send_msg(self):
+        if self.is_close() is True:
+            logger.exception("Connection closed when send msg")
+            raise Exception("Connection closed when send msg")
 
+        msg = data_pack.pack_msg(self.msgId, self.data)
 
+        await self.loop.sock_sendall(self.conn, msg)
