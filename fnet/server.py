@@ -27,8 +27,8 @@ class Server:
         while True:
             conn, client_addr = await self.loop.sock_accept(self.socket)
             logger.info(f'a client connect to server ======> client_addr:{client_addr}')
-            deal_conn = Connection(conn, conn_id)
-            self.loop.create_task(deal_conn.receive_data())
+            deal_conn = Connection(conn, )
+            self.loop.create_task(deal_conn.receive_data(conn_id))
             conn_id += 1
 
     def stop(self):

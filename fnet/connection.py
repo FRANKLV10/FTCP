@@ -9,23 +9,20 @@ from fnet.datapack import data_pack
 
 
 class Connection:
-    def __init__(self, conn, connID):
+    def __init__(self, conn):
         self.conn = conn
-        self.connID = connID
-        self.loop = asyncio.get_running_loop()
 
-    def start(self):
-        pass
+        self.loop = asyncio.get_running_loop()
 
     def close(self):
         """check connections status """
         getattr(self.conn, '_closed')
         self.conn.close()
 
-    async def receive_data(self):
+    async def receive_data(self, connID):
         """receive data from client """
         data = b''
-        logger.info(f"connID is {self.connID}")
+        logger.info(f"connID is {connID}")
         while True:
             # read msg head
             head_data = await self.loop.sock_recv(self.conn, data_pack.headLen)
@@ -42,7 +39,27 @@ class Connection:
 
             await msg_handler.process_messages_now(req)
 
+    async def send_msg(self, send_msgId: int, send_data: bytes):
+        if self.is_close() is True:
+            logger.exception("Connection closed when send msg")
+            raise Exception("Connection closed when send msg")
+        # pack msg
+        msg = new_message(send_msgId, send_data)
+        msg = data_pack.pack_msg(msg)
+        # send msg to client
+        await self.loop.sock_sendall(self.conn, msg)
 
-if __name__ == '__main__':
-    a, b = (1, 2)
-    print(a, b)
+    def is_close(self) -> bool:
+        """
+        whether the connection is closed
+        :return:
+        """
+        return getattr(self.conn, '_closed')
+
+
+class ConnectionManager:
+    def __init__(self):
+        self.connections = {}
+
+    def add_conn(self):
+        self.connections
