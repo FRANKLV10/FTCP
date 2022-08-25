@@ -16,7 +16,7 @@ def client():
             msg = data_pack.pack_msg(m)
             c.send(msg)
             time.sleep(1)
-            data = c.recv(1024).decode()
+            data = c.recv(1024)
             print(data)
 
 

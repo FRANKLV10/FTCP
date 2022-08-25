@@ -14,7 +14,6 @@ class Connection:
         self.connID = connID
         self.loop = asyncio.get_running_loop()
 
-
     def start(self):
         pass
 
