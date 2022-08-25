@@ -1,14 +1,12 @@
 import asyncio
-import socket
-
-from fnet.messagehandler import msg_handler
 from utils.logger import logger
 from fnet.message import new_message
 from fnet.datapack import data_pack
 
 
 class Connection:
-    def __init__(self, conn, connID):
+    def __init__(self, server, conn, connID):
+        self.server = server  # type: Server :object
         self.conn = conn
         self.connID = connID
         self.loop = asyncio.get_running_loop()
@@ -20,6 +18,7 @@ class Connection:
 
     async def receive_data(self, deal_conn):
         """receive data from client """
+        data = None
         from fnet.tcprequest import TcpRequest
         logger.info(f"connID is {self.connID}")
         while True:
@@ -35,8 +34,7 @@ class Connection:
 
             # get client request
             req = TcpRequest(deal_conn, msg)
-
-            await msg_handler.process_messages_now(req)
+            await self.server.msg_handler.process_messages_now(req)
 
     async def send_msg(self, send_msgId: int, send_data: bytes):
         if self.is_close() is True:

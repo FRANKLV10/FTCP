@@ -4,7 +4,7 @@ from fnet.message import Message
 
 class TcpRequest:
     def __init__(self, connection, msg: Message):
-        self.connection = connection
+        self.connection = connection  # type Connection：object
         self.msg = msg
         self.loop = asyncio.get_running_loop()
 

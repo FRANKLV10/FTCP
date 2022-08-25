@@ -9,7 +9,7 @@ class MessageHandler:
         self.queue = None
 
     async def process_messages_now(self, req: TcpRequest):
-        router = self.apis.get(req.msgId)  # get router
+        router: Router = self.apis.get(req.msgId)  # get router
         if router is not None:
             await router.pre_handle(req)
             await router.handle(req)
@@ -26,6 +26,3 @@ class MessageHandler:
         """
         self.apis[msgId] = router
         print(f"add router success,msgId is {msgId}")
-
-
-msg_handler = MessageHandler()
