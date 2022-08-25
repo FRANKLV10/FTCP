@@ -5,7 +5,7 @@ from fnet.message import Message
 from utils.logger import logger
 
 
-class TcpRequest():
+class TcpRequest:
     def __init__(self, conn, msg: Message):
         self.conn = conn
         self.msg = msg
@@ -26,11 +26,11 @@ class TcpRequest():
         """
         return getattr(self.conn, '_closed')
 
-    async def send_msg(self):
+    async def send_msg(self, send_msgId, send_data):
         if self.is_close() is True:
             logger.exception("Connection closed when send msg")
             raise Exception("Connection closed when send msg")
 
-        msg = data_pack.pack_msg(self.msgId, self.data)
+        msg = data_pack.pack_msg(send_msgId, send_data)
 
         await self.loop.sock_sendall(self.conn, msg)
