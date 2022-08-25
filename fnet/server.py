@@ -8,12 +8,13 @@ from fnet.connection import Connection
 
 class Server:
     def __init__(self, config):
-        self.name = config["name"]
-        self.ip = config["ip"]
-        self.port = config["port"]
+        self.name = config.get("name")
+        self.ip = config.get("ip")
+        self.port = config.get("port")
+        self.max_conn = config.get("maxcoon")
         self.AF_INET = (self.ip, self.port)
         self.socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        self.loop = asyncio.get_event_loop()
+        self.loop = asyncio.new_event_loop()
         self.router = None
 
     async def start(self):
@@ -27,7 +28,7 @@ class Server:
             conn, client_addr = await self.loop.sock_accept(self.socket)
             logger.info(f'a client connect to server ======> client_addr:{client_addr}')
             deal_conn = Connection(conn, conn_id, self.router)
-            self.loop.create_task(deal_conn.start_receiver())
+            self.loop.create_task(deal_conn.receive_data())
             conn_id += 1
 
     def stop(self):
@@ -35,13 +36,10 @@ class Server:
 
     def serve(self):
         self.socket.bind((self.ip, self.port))
-        self.socket.listen(10)
+        self.socket.listen(self.max_conn)
         self.loop.run_until_complete(self.start())
 
     def add_router(self, router: Router):
         self.router = router
 
 
-if __name__ == '__main__':
-    server = Server()
-    server.serve()

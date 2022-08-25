@@ -7,7 +7,7 @@ class TcpRequest:
     def __init__(self, conn, msg: Message):
         self.conn = conn
         self.msg = msg
-        self.loop = asyncio.get_event_loop()
+        self.loop = asyncio.get_running_loop()
 
     @property
     def data(self) -> bytes:

@@ -5,9 +5,9 @@ from fnet.tcprequest import TcpRequest
 
 
 class MyRouter(Router):
-    async def pre_handle(self, req: TcpRequest):
-        if req.msgId == 1:
-            await req.loop.sock_sendall(req.conn, b"pre handle")
+    # async def pre_handle(self, req: TcpRequest):
+    #     if req.msgId == 1:
+    #         await req.loop.sock_sendall(req.conn, b"pre handle")
 
     async def handle(self, req: TcpRequest):
         if req.msgId == 2:
@@ -23,5 +23,4 @@ if __name__ == '__main__':
     r = MyRouter()
     s = Server(config)
     s.add_router(r)
-    print(s.router)
     s.serve()

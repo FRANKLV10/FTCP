@@ -11,7 +11,7 @@ class Connection:
     def __init__(self, conn, connID, router):
         self.conn = conn
         self.connID = connID
-        self.loop = asyncio.get_event_loop()
+        self.loop = asyncio.get_running_loop()
         self.router = router
 
     def start(self):
@@ -28,7 +28,7 @@ class Connection:
         getattr(self.conn, '_closed')
         self.conn.close()
 
-    async def start_receiver(self):
+    async def receive_data(self):
         """
 
         :param conn:
@@ -47,6 +47,8 @@ class Connection:
                 data = await self.loop.sock_recv(self.conn, data_len)
                 print(f"receive data: {data}")
             msg = new_message(msgId, data)
+
+            # get client request
             req = TcpRequest(self.conn, msg)
 
             #
