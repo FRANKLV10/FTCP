@@ -17,14 +17,8 @@ class Connection:
     def start(self):
         pass
 
-    def is_close(self) -> bool:
-        """
-        whether the connection is closed
-        :return:
-        """
-        return getattr(self.conn, '_closed')
-
     def close(self):
+        """check connections stauts """
         getattr(self.conn, '_closed')
         self.conn.close()
 
@@ -57,14 +51,7 @@ class Connection:
                 await self.router.handle(req)
                 await self.router.after_handle(req)
 
-    async def send_msg(self, msgId, data):
-        if self.close() is True:
-            logger.exception("Connection closed when send msg")
-            raise Exception("Connection closed when send msg")
 
-        # msg_handler.pack_msg(msg)
-        #
-        # await self.loop.sock_sendall(msg)
 
 
 if __name__ == '__main__':
