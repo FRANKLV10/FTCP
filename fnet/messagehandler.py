@@ -1,3 +1,4 @@
+from fnet.router import Router
 from fnet.tcprequest import TcpRequest
 
 
@@ -16,7 +17,13 @@ class MessageHandler:
         else:
             print(f"msgId:{req.msgId} is not found")
 
-    def add_router(self, msgId, router):
+    def add_router(self, msgId: int, router: Router):
+        """
+        add router in api dict
+        :param msgId:
+        :param router:
+        :return:
+        """
         self.apis[msgId] = router
         print(f"add router success,msgId is {msgId}")
 

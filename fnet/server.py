@@ -41,4 +41,5 @@ class Server:
 
     @staticmethod
     def add_router(msgId: int, router: Router):
+        """add api router"""
         msg_handler.add_router(msgId, router)

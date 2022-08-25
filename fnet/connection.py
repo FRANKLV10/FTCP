@@ -24,11 +24,7 @@ class Connection:
         self.conn.close()
 
     async def receive_data(self):
-        """
-
-        :param conn:
-        :return:
-        """
+        """receive data from client """
         data = b''
         logger.info(f"connID is {self.connID}")
         while True:
@@ -36,8 +32,7 @@ class Connection:
             head_data = await self.loop.sock_recv(self.conn, data_pack.headLen)
             print(f"receive head data: {head_data}")
             data_len, msgId = data_pack.unpack_msg(head_data)
-            # data_len = 0
-            # msgId = 1
+
             if data_len > 0:
                 data = await self.loop.sock_recv(self.conn, data_len)
                 print(f"receive data: {data}")
@@ -45,12 +40,6 @@ class Connection:
 
             # get client request
             req = TcpRequest(self.conn, msg)
-
-            #
-            # if self.router is not None:
-            #     await self.router.pre_handle(req)
-            #     await self.router.handle(req)
-            #     await self.router.after_handle(req)
 
             await msg_handler.process_messages_now(req)
 
