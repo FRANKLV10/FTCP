@@ -4,7 +4,7 @@ import socket
 from fnet.messagehandler import MessageHandler
 from fnet.router import Router
 from utils.logger import logger
-from fnet.connection import Connection
+from fnet.connection import Connection, ConnectionManager
 
 
 class Server:
@@ -17,6 +17,7 @@ class Server:
         self.socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.msg_handler = MessageHandler()
         self.loop = asyncio.new_event_loop()
+        self.conn_manager = ConnectionManager()
 
     async def start(self):
         """
@@ -27,8 +28,13 @@ class Server:
         conn_id = 0
         while True:
             conn, client_addr = await self.loop.sock_accept(self.socket)
+            if self.conn_manager.get_conn_num() >= self.max_conn:
+                conn.close()
+
             logger.info(f'a client connect to server ======> client_addr:{client_addr}')
-            deal_conn = Connection(self, conn, conn_id)
+            deal_conn = Connection(self, conn, conn_id, client_addr)
+            self.conn_manager.add_conn(deal_conn)
+
             self.loop.create_task(deal_conn.receive_data(deal_conn))
             conn_id += 1
 

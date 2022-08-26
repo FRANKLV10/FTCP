@@ -31,6 +31,12 @@ class Message:
 
 
 def new_message(msgId: int, data: bytes):
+    """
+    create a new message
+    :param msgId:
+    :param data:
+    :return:
+    """
     msg = Message()
     msg.msgId = msgId
     msg.data = data
