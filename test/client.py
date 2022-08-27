@@ -2,6 +2,7 @@ import socket
 import time
 from fnet.message import new_message
 from fnet.datapack import data_pack
+import threading
 
 
 def client():
@@ -16,10 +17,17 @@ def client():
             msg = data_pack.pack_msg(m)
             c.send(msg)
             time.sleep(1)
-            data = c.recv(1024)
-            print(data)
+            head = c.recv(8)
+            data_len, id = data_pack.unpack_msg(head)
+
+            data = c.recv(data_len)
+
+            print(id, data.decode())
 
 
 if __name__ == '__main__':
     # expect print after handle,pre handle,handle
-    client()
+
+    for i in range(201):
+        t = threading.Thread(target=client, args=())
+        t.start()

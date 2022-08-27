@@ -4,19 +4,25 @@ from fnet.router import Router
 from fnet.server import Server
 from fnet.tcprequest import TcpRequest
 
+config = get_config("./config.json")
+server = Server(config)
 
+
+@server.router(1)
 class MyRouter1(Router):
     async def pre_handle(self, req: TcpRequest):
         if req.msgId == 1:
             await req.connection.send_msg(1, b"234234f")
 
 
+@server.router(2)
 class MyRouter2(Router):
     async def handle(self, req: TcpRequest):
         if req.msgId == 2:
             await req.connection.send_msg(2, b"freererfe")
 
 
+@server.router(3)
 class MyRouter3(Router):
     async def after_handle(self, req: TcpRequest):
         if req.msgId == 3:
@@ -24,12 +30,5 @@ class MyRouter3(Router):
 
 
 if __name__ == '__main__':
-    config = get_config("./config.json")
-    r1 = MyRouter1()
-    r2 = MyRouter2()
-    r3 = MyRouter3()
-    s = Server(config)
-    s.add_router(1, r1)
-    s.add_router(2, r2)
-    s.add_router(3, r3)
-    s.serve()
+
+    server.serve()

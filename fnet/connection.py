@@ -28,12 +28,12 @@ class Connection:
             # read msg head
             try:
                 head_data = await self.loop.sock_recv(self.conn, data_pack.headLen)
-                print(f"receive head data: {head_data}")
+                # print(f"receive head data: {head_data}")
                 data_len, msgId = data_pack.unpack_msg(head_data)
 
                 if data_len > 0:
                     data = await self.loop.sock_recv(self.conn, data_len)
-                    print(f"receive data: {data}")
+                    # print(f"receive data: {data}")
                 msg = new_message(msgId, data)
 
                 # get client request
@@ -81,10 +81,8 @@ class ConnectionManager:
     def get_conn(self, connID: int):
         return self.connections[connID]
 
-    def delete_conn(self,connID: int):
+    def delete_conn(self, connID: int):
         del self.connections[connID]
 
     def get_conn_num(self) -> int:
-
         return len(self.connections)
-

@@ -1,6 +1,9 @@
 import asyncio
 import socket
+import time
 
+from fnet.datapack import data_pack
+from fnet.message import new_message
 from fnet.messagehandler import MessageHandler
 from fnet.router import Router
 from utils.logger import logger
@@ -28,15 +31,16 @@ class Server:
         conn_id = 0
         while True:
             conn, client_addr = await self.loop.sock_accept(self.socket)
+
             if self.conn_manager.get_conn_num() >= self.max_conn:
                 conn.close()
-
-            logger.info(f'a client connect to server ======> client_addr:{client_addr}')
-            deal_conn = Connection(self, conn, conn_id, client_addr)
-            self.conn_manager.add_conn(deal_conn)
-
-            self.loop.create_task(deal_conn.receive_data(deal_conn))
-            conn_id += 1
+            else:
+                logger.info(f'a client connect to server ======> client_addr:{client_addr}')
+                deal_conn = Connection(self, conn, conn_id, client_addr)
+                self.conn_manager.add_conn(deal_conn)
+                self.loop.create_task(deal_conn.receive_data(deal_conn))
+                conn_id += 1
+            print(self.conn_manager.get_conn_num())
 
     def router(self, msg_id: int):
         def wrapper(router: Router):
