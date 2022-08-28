@@ -21,7 +21,7 @@ class Server:
         self.msg_handler = MessageHandler()
         self.loop = asyncio.new_event_loop()
         self.conn_manager = ConnectionManager()
-        self.packet = DataPack
+        self.packet = DataPack()
 
     async def start(self):
         """

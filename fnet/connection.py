@@ -3,7 +3,6 @@ from typing import Dict
 
 from utils.logger import logger
 from fnet.message import new_message
-from fnet.datapack import data_pack
 from fnet.tcprequest import TcpRequest
 
 
@@ -27,7 +26,7 @@ class Connection:
         while True:
             # read msg head
             try:
-                head_data = await self.loop.sock_recv(self.conn, data_pack.headLen)
+                head_data = await self.loop.sock_recv(self.conn, self.server.packet.headLen)
                 # print(f"receive head data: {head_data}")
                 data_len, msgId = self.server.packet.unpack_msg(head_data)
 
