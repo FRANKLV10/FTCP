@@ -29,7 +29,7 @@ class Connection:
             try:
                 head_data = await self.loop.sock_recv(self.conn, data_pack.headLen)
                 # print(f"receive head data: {head_data}")
-                data_len, msgId = data_pack.unpack_msg(head_data)
+                data_len, msgId = self.server.packet.unpack_msg(head_data)
 
                 if data_len > 0:
                     data = await self.loop.sock_recv(self.conn, data_len)
@@ -53,7 +53,7 @@ class Connection:
             raise Exception("Connection closed when send msg")
         # pack msg
         msg = new_message(send_msgId, send_data)
-        msg = data_pack.pack_msg(msg)
+        msg = self.server.packet.pack_msg(msg)
         # send msg to client
         await self.loop.sock_sendall(self.conn, msg)
 

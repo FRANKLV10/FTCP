@@ -2,7 +2,7 @@ import asyncio
 import socket
 import time
 
-from fnet.datapack import data_pack
+from fnet.datapack import DataPack
 from fnet.message import new_message
 from fnet.messagehandler import MessageHandler
 from fnet.router import Router
@@ -21,6 +21,7 @@ class Server:
         self.msg_handler = MessageHandler()
         self.loop = asyncio.new_event_loop()
         self.conn_manager = ConnectionManager()
+        self.packet = DataPack
 
     async def start(self):
         """
