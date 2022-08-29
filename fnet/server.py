@@ -11,7 +11,7 @@ from fnet.connection import Connection, ConnectionManager
 
 
 class Server:
-    def __init__(self, config):
+    def __init__(self, config, packet=None):
         self.name = config.get("name")
         self.ip = config.get("ip")
         self.port = config.get("port")
@@ -21,7 +21,7 @@ class Server:
         self.msg_handler = MessageHandler()
         self.loop = asyncio.new_event_loop()
         self.conn_manager = ConnectionManager()
-        self.packet = DataPack()
+        self.packet = DataPack() if packet is None else packet
 
     async def start(self):
         """
@@ -32,10 +32,11 @@ class Server:
         conn_id = 0
         while True:
             conn, client_addr = await self.loop.sock_accept(self.socket)
-
+            # determinate max connection
             if self.conn_manager.get_conn_num() >= self.max_conn:
                 conn.close()
             else:
+                # receive message from client
                 logger.info(f'a client connect to server ======> client_addr:{client_addr}')
                 deal_conn = Connection(self, conn, conn_id, client_addr)
                 self.conn_manager.add_conn(deal_conn)
