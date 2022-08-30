@@ -40,12 +40,13 @@ class BuildingUpdate(Router):
 
         player = Players[msg.playerId]
         building = player.buildings[msg.buildingId]
+        print(msg.costBy)
         is_enough = player.is_currency_enough(msg.costBy, building.cost[msg.costBy])
         if is_enough is True:
 
             building.upgrade_building(player)
             if building.error == "":
-                print(building.error)
+
                 player.cost_currency(msg.costBy, building.cost[msg.costBy])
         elif is_enough is False:
             building.error = f"currency not enough"

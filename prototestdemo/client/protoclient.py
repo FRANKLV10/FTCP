@@ -86,7 +86,7 @@ def building_proto(player_id: str, building_id: int, cost: str):
     if cost == "Gems":
         building.costBy = building_pb2.CostType.Gems
     elif cost == "Gold":
-        building.costBy = building_pb2.CostType.Glod
+        building.costBy = building_pb2.CostType.Gold
     else:
         raise Exception("unknown type")
     building.buildingId = building_id
@@ -100,7 +100,7 @@ def building_proto(player_id: str, building_id: int, cost: str):
 if __name__ == '__main__':
     IP = "127.0.0.1"
     port = 8990
-    data = building_proto("user1", 1001, "gold")
+    data = building_proto("user1", 1003, "Gems")
     data = pack_package(data, 10001)
     A = proto_request(IP, port, data)
     unpack_package(A)

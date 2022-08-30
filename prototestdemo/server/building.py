@@ -6,7 +6,7 @@ class Building:
         self.pre_building = config.get("pre_building")
         self.gold_cost = config.get("gold_cost")
         self.gem_cost = config.get("gem_cost")
-        self.cost = [config.get("gem_cost"),config.get("gold_cost") ]
+        self.cost = [config.get("gem_cost") ,config.get("gold_cost")]
         self.error = ""
 
     def upgrade_building(self, player):

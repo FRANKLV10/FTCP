@@ -10,18 +10,18 @@ class Player:
 
     def is_currency_enough(self, currency_type, cost):
         if currency_type == 0:
-            return self.gold >= cost
-        elif currency_type == 1:
             return self.gems >= cost
+        elif currency_type == 1:
+            return self.gold >= cost
         else:
             return "unknown costBy"
 
     def cost_currency(self, currency_type, cost):
         if self.is_currency_enough(currency_type, cost) is True:
             if currency_type == 0:
-                self.gold -= cost
-            if currency_type == 1:
                 self.gems -= cost
+            if currency_type == 1:
+                self.gold -= cost
 
 
 Players = {}
