@@ -1,9 +1,6 @@
 import asyncio
 import socket
-import time
-
 from fnet.datapack import DataPack
-from fnet.message import new_message
 from fnet.messagehandler import MessageHandler
 from fnet.router import Router
 from utils.logger import logger
@@ -17,6 +14,7 @@ class Server:
         self.port = config.get("port")
         self.max_conn = config.get("maxcoon")
         self.AF_INET = (self.ip, self.port)
+        self.log = logger
         self.socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.msg_handler = MessageHandler()
         self.loop = asyncio.new_event_loop()
@@ -28,7 +26,7 @@ class Server:
         start accept client connection
         :return:
         """
-        logger.info(f"[{self.name}] start success")
+        self.log.info(f"[{self.name}] start success")
         conn_id = 0
         while True:
             conn, client_addr = await self.loop.sock_accept(self.socket)
@@ -37,7 +35,7 @@ class Server:
                 conn.close()
             else:
                 # receive message from client
-                logger.info(f'a client connect to server ======> client_addr:{client_addr}')
+                self.log.info(f'a client connect to server ======> client_addr:{client_addr}')
                 deal_conn = Connection(self, conn, conn_id, client_addr)
                 self.conn_manager.add_conn(deal_conn)
                 self.loop.create_task(deal_conn.receive_data(deal_conn))

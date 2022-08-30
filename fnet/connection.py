@@ -22,7 +22,7 @@ class Connection:
         """receive data from client """
         data = None
 
-        logger.info(f"connID is {self.connID}")
+        self.server.log.info(f"connID is {self.connID}")
         while True:
             # read msg head
             try:
@@ -48,7 +48,7 @@ class Connection:
 
     async def send_msg(self, send_msgId: int, send_data: bytes):
         if self.is_close() is True:
-            logger.exception("Connection closed when send msg")
+            self.server.log.exception("Connection closed when send msg")
             raise Exception("Connection closed when send msg")
         # pack msg
         msg = new_message(send_msgId, send_data)
