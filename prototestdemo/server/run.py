@@ -29,7 +29,7 @@ class BuildingUpdate(Router):
         res_msg.buildingLevelNow = building.level
         res_msg.playerGemNow = player.gems
         res_msg.playerGoldNow = player.gold
-        res_msg.hasError = error
+        res_msg.isSuccess = error
         res_msg.errorMsg = building.error
         res = res_msg.SerializeToString()
         return res

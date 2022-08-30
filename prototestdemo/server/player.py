@@ -26,7 +26,7 @@ class Player:
 
 Players = {}
 
-player_ids = ["test001", "test002", "test003"]
+player_ids = ["user1", "user2", "user3"]
 
 
 def create_player():

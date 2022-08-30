@@ -1,21 +1,6 @@
-
-
 from socket import *
-import config
 import struct
 import building_pb2
-
-
-def building_proto():
-    building = building_pb2.ReqUpgradeBuilding()
-    building.playerId = 'test002'
-    building.costBy = building_pb2.CostType.Gems
-    building.buildingId = 1001
-    print(building)
-
-    data = building.SerializeToString()
-    print(type(data))
-    return data
 
 
 class ProtoClient:
@@ -34,15 +19,15 @@ class ProtoClient:
     def send(self, send_data):
         """
 
-        :param send_data: 数据包
+        :param send_data:
         :return:
         """
         self.socket.send(send_data)
 
     def receive(self):
         """
-        接受数据
-        :return: 服务器回包
+
+        :return:
         """
         while True:
             rev_data = self.socket.recv(1024)
@@ -55,12 +40,12 @@ class ProtoClient:
 
     def transfer(self, ip, port, send_data):
         """
-        建立连接，发送协议，接受协议
+
 
         :param ip:
         :param port:
-        :param send_data:数据包
-        :return: 服务器回包
+        :param send_data:
+        :return:
         """
         self.connect(ip, port)
         self.send(send_data)
@@ -73,7 +58,7 @@ def proto_request(IP, port, data):
     :param IP:
     :param port:
     :param data:
-    :return: 服务器回包
+    :return:
     """
 
     rev_data = ProtoClient().transfer(IP, port, data)
@@ -95,8 +80,27 @@ def unpack_package(rev_data):
     print(result)
 
 
+def building_proto(player_id: str, building_id: int, cost: str):
+    building = building_pb2.ReqUpgradeBuilding()
+    building.playerId = player_id
+    if cost == "Gems":
+        building.costBy = building_pb2.CostType.Gems
+    elif cost == "Gold":
+        building.costBy = building_pb2.CostType.Glod
+    else:
+        raise Exception("unknown type")
+    building.buildingId = building_id
+    print(building)
+
+    data = building.SerializeToString()
+    print(type(data))
+    return data
+
+
 if __name__ == '__main__':
-    data = building_proto()
+    IP = "127.0.0.1"
+    port = 8990
+    data = building_proto("user1", 1001, "gold")
     data = pack_package(data, 10001)
-    A = proto_request(config.Server.IP, config.Server.port, data)
+    A = proto_request(IP, port, data)
     unpack_package(A)
