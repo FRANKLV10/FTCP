@@ -40,7 +40,7 @@ class Server:
                 self.conn_manager.add_conn(deal_conn)
                 self.loop.create_task(deal_conn.receive_data(deal_conn))
                 conn_id += 1
-            print(self.conn_manager.get_conn_num())
+
 
     def router(self, msg_id: int):
         def wrapper(router: Router):

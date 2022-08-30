@@ -23,21 +23,24 @@ class Connection:
         data = None
 
         self.server.log.info(f"connID is {self.connID}")
+
         while True:
             # read msg head
+
             try:
                 head_data = await self.loop.sock_recv(self.conn, self.server.packet.headLen)
-                # print(f"receive head data: {head_data}")
-                data_len, msgId = self.server.packet.unpack_msg(head_data)
+                if head_data != b'':
+                    # print(f"receive head data: {head_data}")
+                    data_len, msgId = self.server.packet.unpack_msg(head_data)
 
-                if data_len > 0:
-                    data = await self.loop.sock_recv(self.conn, data_len)
-                    # print(f"receive data: {data}")
-                msg = new_message(msgId, data)
+                    if data_len > 0:
+                        data = await self.loop.sock_recv(self.conn, data_len)
 
-                # get client request
-                req = TcpRequest(deal_conn, msg)
-                await self.server.msg_handler.process_messages_now(req)
+                    msg = new_message(msgId, data)
+
+                    # get client request
+                    req = TcpRequest(deal_conn, msg)
+                    await self.server.msg_handler.process_messages_now(req)
             except ConnectionError as e:
                 print(f"{e}client disconnect,client addr:{self.client_addr}")
 
