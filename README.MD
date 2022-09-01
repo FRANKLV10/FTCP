@@ -2,6 +2,9 @@ TCP SERVER Framework
     
 
 Server Example
+    
+    config = get_config("./config.json")
+    server = Server(config)
 
     from FTCP.utils.parseconfig import get_config
     from FTCP.fnet.server import Router
