@@ -28,8 +28,9 @@ def singleton_class_decorator(cls):
 
 @singleton_class_decorator
 class Logger:
-    def __init__(self):
+    def __init__(self, path=None):
         self.logger_add()
+        self.path = path
 
     @staticmethod
     def get_project_path(project_path=None):
@@ -42,7 +43,7 @@ class Logger:
 
     def get_log_path(self):
         # 项目目录
-        project_path = self.get_project_path()
+        project_path = self.get_project_path() if self.path is None else self.path
         # 项目日志目录
         project_log_dir = os.path.join(project_path, 'log')
         # 日志文件名
